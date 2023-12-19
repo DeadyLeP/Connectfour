@@ -1,0 +1,120 @@
+from pprint import pprint
+
+# variables différentes:
+points = 0 # pour les conditions de victoire
+
+tab = [] # pour le plateau de jeu
+global colonne 
+global tour
+tour = 0
+colonne = 0 # pour la colonne dans laquelle le joueur joue
+joueur = 1 # pour savoir quel joueur joue
+#fontion qui renvoie un tableau de 6 lignes et 7 colonnes remplies de zéros
+for i in range(6):
+    tab.append([0]*7)
+
+
+
+def colonne_libre(tab, colonne, j):
+    #fonction qui renvoie un booléen indiquant s'il est possible de mettre un jeton dans la colonne (indique si la colonne n'est pas pleine)
+    for j in range(5,-1,-1):
+        if tab[j][colonne-1] == 0:
+            return True
+
+
+
+def affiche_grille(tab):
+    #fonction qui affiche la grille du jeu dans la console de la façon la plus esthétique possible
+    pprint(tab)
+
+
+
+def place_jeton(tab, colonne, joueur, j):
+    #fonction qui place un jeton du joueur (1 ou 2) dans la colonne. Elle renvoie la grille modifiée
+    for j in range(5,-1,-1):
+        if tab[j][colonne-1] == 0:
+            tab[j][colonne-1] += joueur
+            jouer(tab)
+
+
+
+def horizontale(tab, joueur):
+  #fonction qui renvoie True si le joueur a au moins 4 jetons alignés dans une ligne
+  gyjd=0
+
+
+def verticale(tab, joueur):
+    #fonction qui renvoie True si le joueur a au moins 4 jetons alignés dans une colonne
+    
+    points = 0
+    for k in range(7):
+        for i in range(3):
+            if points == 4:
+                return True
+            else:
+                if tab[i][k] == joueur:
+                    points += 1
+                else:
+                    points = 0
+
+
+
+def diagonale(tab, joueur):
+    #fonction qui renvoie True si le joueur a au moins 4 jetons alignés dans une diagonale
+    luihdgf=0
+
+
+def gagne(tab, joueur):
+    #fonction qui renvoie True si le joueur a gagné
+    if horizontale(tab, joueur) == True or verticale(tab, joueur) == True or diagonale(tab, joueur) == True:
+        return True
+
+
+
+def tour_joueur(tab, joueur):
+  #fonction qui permet au joueur de placer un jeton dans la colonne choisie.
+  #Elle indique si la colonne est pleine et permet alors au joueur de choisir une autre colonne
+    global tour
+    j=5
+    for tour in range(0,42,1):
+        colonne = input("Dans quelle colonne voulez vous jouer?  ")
+        if colonne.isnumeric():
+            colonne = int(colonne)
+            if colonne < 8 and colonne > 0:
+                if colonne_libre(tab, colonne, j) == True:
+                    joueur = (tour % 2) + 1
+                    place_jeton(tab, colonne, joueur, j)
+                else:
+                    print("Choisi une autre colonne, elle est pleine")
+            else:
+                print("Peux tu ecrire un nombre entre 1 et 7 s'il te plait?")
+        else:
+            print("Peux tu ecrire un nombre s'il te plait?")
+
+
+def egalite(tab):
+#fonction qui renvoie True s'il y a égalité
+  global tour
+  if tour==42:
+      return True
+
+
+
+def jouer(tab):
+#fonction qui permet aux deux joueurs de jouer chacun leur tour.
+#Elle vérifie que les joueurs n'ont pas gagné à la fin de leur tour.
+#Si l'un des deux à gagné ou s'il y a égalité, elle donne le résultat
+  affiche_grille(tab)
+  while not gagne(tab, joueur):
+      if egalite(tab)== True:
+          print("Aucun joueur n'a gagné, c'est une égalité!")
+          break
+      else:
+          print(joueur)
+          tour_joueur(tab, joueur)
+          global tour
+          print (tour)
+      print("Le joueur" + joueur + "a gagné, bravo!")
+      break
+
+jouer(tab)
